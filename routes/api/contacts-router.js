@@ -6,10 +6,16 @@ import {
   updateFavoriteSchema,
 } from "../../models/Contact.js";
 
-import { isEmptyBody, isValidId } from "../../middlwares/index.js";
+import {
+  isEmptyBody,
+  isValidId,
+  authenticate,
+} from "../../middlwares/index.js";
 import { validateBody } from "../../decorators/index.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
