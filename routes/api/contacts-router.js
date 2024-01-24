@@ -10,6 +10,7 @@ import {
   isEmptyBody,
   isValidId,
   authenticate,
+  upload,
 } from "../../middlwares/index.js";
 import { validateBody } from "../../decorators/index.js";
 
