@@ -107,26 +107,27 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const { token } = req.user;
-  let avatarURL = req.user.avatarURL;
-  if (req.file) {
-    const { path: oldPath, filename } = req.file;
-    const newPath = path.join(avatarPath, filename);
-    await fs.rename(oldPath, newPath);
-    avatarURL = path.join("avatars", filename);
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
   }
+
+  const { token } = req.user;
+
+  let avatarURL = req.user.avatarURL;
+
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarPath, filename);
+  await fs.rename(oldPath, newPath);
+  avatarURL = path.join("avatars", filename);
 
   const result = await User.findOneAndUpdate(
     { token },
     { avatarURL },
     { new: true }
   );
+
   if (!result) {
     throw HttpError(404, "User not found");
-  }
-  if (req.user.avatarURL) {
-    const oldAvatarPath = path.join(path.resolve("public", req.user.avatarURL));
-    await fs.unlink(oldAvatarPath);
   }
 
   res.json({
