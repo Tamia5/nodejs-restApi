@@ -15,6 +15,7 @@ import {
   userSigninScheme,
   userSignupSchema,
   userUpdateSubscriptionSchema,
+  userEmailSchema,
 } from "../../models/User.js";
 
 const authRouter = express.Router();
@@ -54,6 +55,15 @@ authRouter.patch(
   resizeAvatar,
   authenticate,
   authController.updateAvatar
+);
+
+authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  validateBody(userEmailSchema),
+  authController.resendVerifyEmail
 );
 
 export default authRouter;
