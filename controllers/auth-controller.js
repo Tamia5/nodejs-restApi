@@ -64,7 +64,7 @@ const verify = async (req, res) => {
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
-    throw HttpError(404, "User not found");
+    throw HttpError(404, "User not found or already verify");
   }
 
   await User.updateOne(
